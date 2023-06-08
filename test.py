@@ -1,22 +1,20 @@
-# Importing module
 import mysql.connector
- 
-# Creating connection object
-mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "appuser",
-    password = "useruser"
-)
- 
-# Printing the connection object
-print(mydb)
+from decimal import Decimal
 
-if(mydb): 
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    port=3307,
+    password="brad",
+    database="transactions"  # Replace with the actual database name
+)
+
+if mydb:
     print("Connection Successful")
     mycursor = mydb.cursor()
-    mycursor.execute("Show databases")
-    for db in mycursor: 
-        print(db)
-else: 
+    mycursor.execute("SELECT * FROM transaction;")
+    for row in mycursor:
+        formatted_row = [str(item) if isinstance(item, Decimal) else item for item in row]
+        print(formatted_row)
+else:
     print("Not")
-    

@@ -22,7 +22,7 @@ primary key(groupid)
 );
 
 create table transaction(
-transactionid numeric(10) not null,
+transactionid int AUTO_INCREMENT,
 transactionname varchar(50) not null,
 transactiondate DATE not null,
 owedmoney numeric(6,2) not null,
@@ -54,7 +54,7 @@ foreign key(groupid) references usergroup(groupid)
 
 create table user_makes_transaction(
 userid int,
-transactionid numeric(10) not null,
+transactionid int,
 primary key(userid, transactionid),
 foreign key(userid) references user(userid),
 foreign key(transactionid) references transaction(transactionid)
@@ -84,7 +84,7 @@ insert into joins(userid, groupid) values
 -- Example: User 2 owes 200 pesos from User 1 to buy food (assumed both are friends)
 -- if issettled = false, updates balance of currently signed in user and payor id
 -- if user owes money, balance is positive. if user lends money, balance is negative.
-insert into transaction(transactionid, transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (1010, "Food", curdate(), 200, false, "Friend Expense", 2, null);
+insert into transaction(transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values ("Food", curdate(), 200, false, "Friend Expense", 2, null);
 insert into user_makes_transaction values (1, 1010);
 insert into user_makes_transaction values (2, 1010);
 update user set userbalance = userbalance + 200 where userid = 1;
@@ -92,7 +92,7 @@ update user set userbalance = userbalance - 200 where userid = 2;
 update befriends set friendbalance = friendbalance + 200 where user1id = 1 and user2id = 2;
 
 -- Example: User 1 lends 5000 pesos from Genshin Players group 
-insert into transaction(transactionid, transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (2020, "Food Bundle", curdate(), 5000, false, "Group Expense", 1, 1);
+insert into transaction(transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values ("Food Bundle", curdate(), 5000, false, "Group Expense", 1, 1);
 insert into user_makes_transaction values (1, 2020);
 insert into user_makes_transaction values (3, 2020);
 insert into user_makes_transaction values (4, 2020);
@@ -143,9 +143,9 @@ update usergroup set groupname = "Arianators" where groupname = "Swifties"; -- u
 
 -- View all expenses made within a month
 select * from transaction where month(transactiondate) = 5;
--- View all expenses made with a friend (SHOULD BE SPECIFIC FRIEND, userid = 2)
+-- View all expenses made with a friend (SHOULD BE SPECIFIC FRIEND)
 select * from transaction natural join user_makes_transaction where userid = 1 or userid = 2 and expenseType = "Friend Expense";
--- View all expenses made with a group (SHOULD BE SPECIFIC GROUP, groupid = 1)
+-- View all expenses made with a group (SHOULD BE SPECIFIC GROUP)
 select * from transaction natural join user_makes_transaction where userid = 1 and groupid = 1 and expenseType = "Group Expense";
 -- View current balance from all expenses
 select userbalance from user where userid = 1;
@@ -155,3 +155,26 @@ select username from user join befriends on (user.userid = befriends.user1id or 
 select * from usergroup;
 -- View all groups with an outstanding balance
 select * from usergroup where groupbalance > 0;
+
+create view expenses_in_month as select * from transaction where month(transactiondate) = 5;
+
+-- def view_expenses_in_month():
+--     return None
+
+-- def view_expenses_with_friend():
+--     return None
+
+-- def view_expenses_with_group():
+--     return None
+
+-- def view_current_balance():
+--     return None
+
+-- def view_friends_with_outstanding_balance():
+--     return None
+
+-- def view_all_groups():
+--     return None
+
+-- def view_all_groups_with_outstanding_balance():
+--     return None

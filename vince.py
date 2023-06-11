@@ -14,6 +14,8 @@
 
 import mysql.connector
 
+current_id = 1
+
 # Connect to the MySQL database
 def connect_to_database():
     try:
@@ -34,10 +36,12 @@ def sign_up():
     connection = connect_to_database()
     cursor = connection.cursor()
 
-    transaction_name = input("Enter your name: ")
+    # Inputs
+    user_name = input("Enter your name: ")
 
+    # Query
     query = "insert into user(username, userbalance) values (%s,  0);"
-    values = (transaction_name,)
+    values = (user_name,)
 
     cursor.execute(query, values)
     connection.commit()
@@ -47,8 +51,76 @@ def sign_up():
     print("User successfully signed up!")
 
 def add_transaction():
-    # query = "insert into transaction(transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (%s, %s, %s, %s, "Friend Expense", 2, null);"
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        # Inputs
+        transaction_id = int(input("Enter transaction id: "))
+        transaction_name = input("Enter transaction name: ")
+        transaction_date = input("Enter transaction date (YYYY-MM-DD): ")
+        owed_money = float(input("Enter owed money: "))
+        is_settled = bool(input("Is the transaction settled? (True/False): "))
+        expense_type = input("Enter expense type (Friend Expense / Group Expense): ")
+
+        if expense_type == "Friend Expense":
+            friend_id = input("Enter id of friend involved: ")
+            group_id = None
+        elif expense_type == "Group Expense":
+            group_id = input("Enter id of group involved: ")
+
+        payor_id = int(input("Enter payor ID: "))
+
+        # Query
+        query = "insert into transaction(transactionid, transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (%s, %s, %s, %s, %s, %s, %s, %s);"
+        values = (transaction_id, transaction_name, transaction_date, owed_money, is_settled, expense_type, payor_id, group_id)
+        cursor.execute(query, values)
+
+        if expense_type == "Friend Expense":
+
+            query = "insert into user_makes_transaction values (%s, %s);"
+            values = (current_id, transaction_id)
+            cursor.execute(query, values)
+
+            query = "insert into user_makes_transaction values (%s, %s);"
+            values = (friend_id, transaction_id)
+            cursor.execute(query, values)
+
+
+        elif expense_type == "Group Expense":
+            query = "select userid from joins where groupid = %s;"
+            cursor.execute(query, (group_id,))
+            group_members = cursor.fetchall()
+            num = len(group_members)
+            owed_money_per_member = owed_money / num
+
+            # Insert all group members into user_makes_transaction
+            query = "insert into user_makes_transaction values (%s, %s);"
+            for member in group_members:
+                values = (member[0], transaction_id)
+                cursor.execute(query, values)
+
+            # Update userbalance for each member
+            query = "UPDATE user SET userbalance = userbalance - %s WHERE userid = %s;"
+            for member in group_members:
+                values = (owed_money_per_member, member[0])
+                cursor.execute(query, values)
+
+        
+
+        # query = "insert into transaction(transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (%s, %s, %s, %s, %s, %s, %s);"
+        # values = (transaction_name, transaction_date, owed_money, is_settled, expense_type, payor_id, group_id)
+        # cursor.execute(query, values)
+
+        connection.commit()
+    
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
+
 
 def delete_transaction():
     return None
@@ -60,13 +132,64 @@ def update_transaction():
     return None
 
 def add_friend():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        friend_id = input("Enter id of new friend: ")
+        query = "insert into befriends values (%s, %s, 0);"
+        values = (current_id, friend_id)
+
+        cursor.execute(query, values)
+        connection.commit()
+        print("Friend successfully added!")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def delete_friend():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        friend_id = input("Enter id of to be deleted friend: ")
+        query = "delete from befriends where (user1id = %s and user2id = %s) or (user1id = %s and user2id = %s);"
+        values = (current_id, friend_id, friend_id, current_id)
+
+        cursor.execute(query, values)
+        connection.commit()
+        print("Friend successfully deleted!")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def search_friend():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        friend_id = input("Enter id of to be deleted friend: ")
+        query = "delete from befriends where (user1id = %s and user2id = %s) or (user1id = %s and user2id = %s);"
+        values = (current_id, friend_id, friend_id, current_id)
+
+        cursor.execute(query, values)
+        connection.commit()
+        print("Friend successfully deleted!")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def update_friend():
     return None
@@ -84,28 +207,164 @@ def update_group():
     return None
 
 def view_expenses_in_month():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        month = int(input("Enter month (1-12): "))
+
+        query = "select * from transaction where month(transactiondate) = %s"
+        values = (month,)
+
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+
+        if result:
+            print("Expenses made within the month:")
+            for row in result:
+                print(row)
+        else:
+            print("No expenses found for the month.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def view_expenses_with_friend():
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        query = "select * from transaction natural join user_makes_transaction where userid = %s or userid = 2 and expenseType = \"Friend Expense\";"
+        values = (current_id,)
+
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+
+        if result:
+            print("Expenses made with friends:")
+            for row in result:
+                print(row)
+        else:
+            print("No expenses found with friends.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
+    
     return "select * from transaction natural join user_makes_transaction where userid = 1 and expenseType = \"Friend Expense\";"
 
 def view_expenses_with_group():
-    return "select * from transaction natural join user_makes_transaction where userid = 1 and expenseType = \"Group Expense\";"
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        return None
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def view_current_balance():
-    return "select userbalance from user where userid = 1;"
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        query = "select userbalance from user where userid = %s"
+        values = (current_id,)
+
+        cursor.execute(query, values)
+        result = cursor.fetchone()
+
+        print("Current balance:", result[0])
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def view_friends_with_outstanding_balance():
-    return "select username from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and user.userid != 1 and friendbalance > 0;"
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        query = "select userid, username, userbalance from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and user.userid != %s and friendbalance > 0;"
+        values = (current_id,)
+
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+
+        if result:
+            print("Friends with outstanding balance:")
+            for row in result:
+                print(row[0])
+        else:
+            print("No friends found with outstanding balance.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def view_all_groups():
-    return "select * from usergroup;"
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        query = "select * from usergroup;"
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        if result:
+            print("All groups:")
+            for row in result:
+                print(row)
+        else:
+            print("No groups found.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def view_all_groups_with_outstanding_balance():
-    return "select * from usergroup where groupbalance > 0;"
+    connection = connect_to_database()
+    cursor = connection.cursor()
 
-def signUp():
-    return None
+    try:
+        query = "select * from usergroup where groupbalance > 0;"
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        if result:
+            print("Groups with outstanding balance:")
+            for row in result:
+                print(row)
+        else:
+            print("No groups found with outstanding balance.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def logIn():
     return None
@@ -138,6 +397,7 @@ def menu():
 
 0. Exit
 20. Sign up
+21. Log In
 --------------------------------------------------
     ''')
 # Main function to open the application and test the views

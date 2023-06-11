@@ -22,7 +22,7 @@ primary key(groupid)
 );
 
 create table transaction(
-transactionid int AUTO_INCREMENT,
+transactionid numeric(10) not null,
 transactionname varchar(50) not null,
 transactiondate DATE not null,
 owedmoney numeric(6,2) not null,
@@ -51,10 +51,10 @@ primary key(userid, groupid),
 foreign key(userid) references user(userid),
 foreign key(groupid) references usergroup(groupid)
 );
-
+ 
 create table user_makes_transaction(
 userid int,
-transactionid int,
+transactionid numeric(10) not null,
 primary key(userid, transactionid),
 foreign key(userid) references user(userid),
 foreign key(transactionid) references transaction(transactionid)
@@ -84,15 +84,15 @@ insert into joins(userid, groupid) values
 -- Example: User 2 owes 200 pesos from User 1 to buy food (assumed both are friends)
 -- if issettled = false, updates balance of currently signed in user and payor id
 -- if user owes money, balance is positive. if user lends money, balance is negative.
-insert into transaction(transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values ("Food", curdate(), 200, false, "Friend Expense", 2, null);
-insert into user_makes_transaction values (1, 1010);
-insert into user_makes_transaction values (2, 1010);
+insert into transaction(transactionid, transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (2010, "Food", curdate(), 200, false, "Friend Expense", 2, null);
+insert into user_makes_transaction values (1, 2010);
+insert into user_makes_transaction values (2, 2010);
 update user set userbalance = userbalance + 200 where userid = 1;
 update user set userbalance = userbalance - 200 where userid = 2;
 update befriends set friendbalance = friendbalance + 200 where user1id = 1 and user2id = 2;
 
 -- Example: User 1 lends 5000 pesos from Genshin Players group 
-insert into transaction(transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values ("Food Bundle", curdate(), 5000, false, "Group Expense", 1, 1);
+insert into transaction(transactionid, transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values (2020, "Food Bundle", curdate(), 5000, false, "Group Expense", 1, 1);
 insert into user_makes_transaction values (1, 2020);
 insert into user_makes_transaction values (3, 2020);
 insert into user_makes_transaction values (4, 2020);
@@ -130,7 +130,7 @@ select username from user join befriends on (user.userid = befriends.user1id or 
 update user set username = "Taylor" where username = "Betty"; -- updates necessary values set by logged in user (ex: username)
 
 ----- Add group -----
-insert into joins values(1,1);
+insert into joins values(3,3);
 ----- Delete group -----
 delete from joins where userid = 1 and groupid = 1;
 ----- Search group -----
@@ -150,7 +150,10 @@ select * from transaction natural join user_makes_transaction where userid = 1 a
 -- View current balance from all expenses
 select userbalance from user where userid = 1;
 -- View all friends with outstanding balance
-select username from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and user.userid != 1 and friendbalance > 0;
+select userid, username, userbalance from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and (befriends.user1id = 1 or befriends.user2id = 1) and user.userid != 1 and friendbalance > 0;
+select userid, username, userbalance from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and (befriends.user1id = 1 or befriends.user2id = 1) and user.userid != 1 and friendbalance > 0;
+
+select userid, username, userbalance from user u join befriends b on (u.userid = b.user1id or u.userid = b.user2id) where (b.user1id = 1 or b.user2id = 1) and u.userid != 1 and friendbalance > 0;
 -- View all groups; 
 select * from usergroup;
 -- View all groups with an outstanding balance

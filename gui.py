@@ -17,6 +17,36 @@ def iexit():
     else:
         pass
 
+# def var_states():
+#     connectWindow=Toplevel()
+#     connectWindow.grab_set()
+#     connectWindow.geometry('470x250+730+230')
+#     connectWindow.title('Database Connection')
+#     connectWindow.resizable(0,0)
+
+#     hostnameLabel=Label(connectWindow,text='Host Name',font=('arial',20,'bold'))
+#     hostnameLabel.grid(row=0,column=0,padx=20)
+
+#     hostEntry=Entry(connectWindow,font=('roman',15,'bold'),bd=2)
+#     hostEntry.grid(row=0,column=1,padx=40,pady=20)
+
+#     usernameLabel = Label(connectWindow, text='User Name', font=('arial', 20, 'bold'))
+#     usernameLabel.grid(row=1, column=0, padx=20)
+
+#     usertransactiondate = Entry(connectWindow, font=('roman', 15, 'bold'), bd=2)
+#     usertransactiondate.grid(row=1, column=1, padx=40, pady=20)
+
+#     passwordLabel = Label(connectWindow, text='Password', font=('arial', 20, 'bold'))
+#     passwordLabel.grid(row=2, column=0, padx=20)
+
+#     passwordEntry = Entry(connectWindow, font=('roman', 15, 'bold'), bd=2)
+#     passwordEntry.grid(row=2, column=1, padx=40, pady=20)
+
+#     connectButton=ttk.Button(connectWindow,text='CONNECT',command=connect)
+#     connectButton.grid(row=3,columnspan=2)
+
+
+#     return var1
 
 # creates  a  text box for user input
 def toplevel_data(title,button_text,command):
@@ -25,46 +55,101 @@ def toplevel_data(title,button_text,command):
     screen.title(title)
     screen.grab_set()
     screen.resizable(False, False)
-    
-    transacID = Label(screen, text='transactionid', font=('times new roman', 20, 'bold'))
-    transacID.grid(row=0, column=0, padx=30, pady=5, sticky=W)
-    transactionid = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    transactionid.grid(row=0, column=1, pady=15, padx=10)
 
-    transacDate = Label(screen, text='transactionname', font=('times new roman', 20, 'bold'))
-    transacDate.grid(row=1, column=0, padx=30, pady=5, sticky=W)
-    transactionname = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    transactionname.grid(row=1, column=1, pady=15, padx=10)
+    if(button_text=='Add'):
+        # checkExpense = var_states(screen)
+        
+        transacID = Label(screen, text='transactionid', font=('times new roman', 20, 'bold'))
+        transacID.grid(row=0, column=0, padx=30, pady=5, sticky=W)
+        transactionid = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        transactionid.grid(row=0, column=1, pady=15, padx=10)
 
-    transacDate = Label(screen, text='transactiondate', font=('times new roman', 20, 'bold'))
-    transacDate.grid(row=2, column=0, padx=30, pady=5, sticky=W)
-    transactiondate = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    transactiondate.grid(row=2, column=1, pady=15, padx=10)
+        transacDate = Label(screen, text='transactionname', font=('times new roman', 20, 'bold'))
+        transacDate.grid(row=1, column=0, padx=30, pady=5, sticky=W)
+        transactionname = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        transactionname.grid(row=1, column=1, pady=15, padx=10)
 
-    utang = Label(screen, text='owedemoney', font=('times new roman', 20, 'bold'))
-    utang.grid(row=3, column=0, padx=30, pady=5, sticky=W)
-    owedmoney = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    owedmoney.grid(row=3, column=1, pady=15, padx=10)
+        transacDate = Label(screen, text='transactiondate', font=('times new roman', 20, 'bold'))
+        transacDate.grid(row=2, column=0, padx=30, pady=5, sticky=W)
+        transactiondate = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        transactiondate.grid(row=2, column=1, pady=15, padx=10)
 
-    nabayaranBaUtang = Label(screen, text='issettled', font=('times new roman', 20, 'bold'))
-    nabayaranBaUtang.grid(row=4, column=0, padx=30, pady=5, sticky=W)
-    issettled = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    issettled.grid(row=4, column=1, pady=15, padx=10)
+        utang = Label(screen, text='owedemoney', font=('times new roman', 20, 'bold'))
+        utang.grid(row=3, column=0, padx=30, pady=5, sticky=W)
+        owedmoney = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        owedmoney.grid(row=3, column=1, pady=15, padx=10)
 
-    expenseLabel = Label(screen, text='expensetype', font=('times new roman', 20, 'bold'))
-    expenseLabel.grid(row=5, column=0, padx=30, pady=5, sticky=W)
-    expensetype = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    expensetype.grid(row=5, column=1, pady=15, padx=10)
+        nabayaranBaUtang = Label(screen, text='issettled', font=('times new roman', 20, 'bold'))
+        nabayaranBaUtang.grid(row=4, column=0, padx=30, pady=5, sticky=W)
+        issettled = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        issettled.grid(row=4, column=1, pady=15, padx=10)
 
-    payorLabel = Label(screen, text='payorid', font=('times new roman', 20, 'bold'))
-    payorLabel.grid(row=6, column=0, padx=30, pady=5, sticky=W)
-    payorid = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        expenseLabel = Label(screen, text='expensetype', font=('times new roman', 20, 'bold'))
+        expenseLabel.grid(row=5, column=0, padx=30, pady=5, sticky=W)
+        expensetype = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        expensetype.grid(row=5, column=1, pady=15, padx=10)
+
+        payorLabel = Label(screen, text='payorid', font=('times new roman', 20, 'bold'))
+        payorLabel.grid(row=6, column=0, padx=30, pady=5, sticky=W)
+        payorid = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        payorid.grid(row=6, column=1, pady=15, padx=10)
+   
+
+   
+
+        # if(checkExpense==1):
+        #     groupLabel = Label(screen, text='groupid', font=('times new roman', 20, 'bold'))
+        #     groupLabel.grid(row=8, column=0, padx=30, pady=5, sticky=W)
+        #     groupid = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        #     groupid.grid(row=8, column=1, pady=15, padx=10)
+        # else:
+            # groupLabel = Label(screen, text='friendid', font=('times new roman', 20, 'bold'))
+            # groupLabel.grid(row=8, column=0, padx=30, pady=5, sticky=W)
+            # groupid = Entry(screen, font=('roman', 15, 'bold'), width=24)
+            # groupid.grid(row=8, column=1, pady=15, padx=10)
+
+    else:
+        transacID = Label(screen, text='transactionid', font=('times new roman', 20, 'bold'))
+        transacID.grid(row=0, column=0, padx=30, pady=5, sticky=W)
+        transactionid = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        transactionid.grid(row=0, column=1, pady=15, padx=10)
+
+        transacDate = Label(screen, text='transactionname', font=('times new roman', 20, 'bold'))
+        transacDate.grid(row=1, column=0, padx=30, pady=5, sticky=W)
+        transactionname = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        transactionname.grid(row=1, column=1, pady=15, padx=10)
+
+        transacDate = Label(screen, text='transactiondate', font=('times new roman', 20, 'bold'))
+        transacDate.grid(row=2, column=0, padx=30, pady=5, sticky=W)
+        transactiondate = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        transactiondate.grid(row=2, column=1, pady=15, padx=10)
+
+        utang = Label(screen, text='owedemoney', font=('times new roman', 20, 'bold'))
+        utang.grid(row=3, column=0, padx=30, pady=5, sticky=W)
+        owedmoney = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        owedmoney.grid(row=3, column=1, pady=15, padx=10)
+
+        nabayaranBaUtang = Label(screen, text='issettled', font=('times new roman', 20, 'bold'))
+        nabayaranBaUtang.grid(row=4, column=0, padx=30, pady=5, sticky=W)
+        issettled = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        issettled.grid(row=4, column=1, pady=15, padx=10)
+
+        expenseLabel = Label(screen, text='expensetype', font=('times new roman', 20, 'bold'))
+        expenseLabel.grid(row=5, column=0, padx=30, pady=5, sticky=W)
+        expensetype = Entry(screen, font=('roman', 15, 'bold'), width=24)
+        expensetype.grid(row=5, column=1, pady=15, padx=10)
+
+        payorLabel = Label(screen, text='payorid', font=('times new roman', 20, 'bold'))
+        payorLabel.grid(row=6, column=0, padx=30, pady=5, sticky=W)
+        payorid = Entry(screen, font=('roman', 15, 'bold'), width=24)
     payorid.grid(row=6, column=1, pady=15, padx=10)
+    
 
-    groupLabel = Label(screen, text='groupid', font=('times new roman', 20, 'bold'))
-    groupLabel.grid(row=7, column=0, padx=30, pady=5, sticky=W)
-    groupid = Entry(screen, font=('roman', 15, 'bold'), width=24)
-    groupid.grid(row=7, column=1, pady=15, padx=10)
+
+
+
+
+
 
     execute_query = ttk.Button(screen, text=button_text, command=command)
     execute_query.grid(row=10, columnspan=2, pady=15)
@@ -72,6 +157,8 @@ def toplevel_data(title,button_text,command):
 # def update_transaction():
 
 
+
+   
 def show_all_transactions():
     query = 'select * from transaction'
     mycursor.execute(query)
@@ -95,8 +182,6 @@ def delete_transaction():
         transactionTable.insert('',END,values=data)
 
 
-
-
 def search_transactions():
     query='select * from transaction where transactionid=%s or transactionname=%s or transactiondate=%s or owedmoney=%s or issettled=%s or expensetype=%s or payorid=%s or groupid=%s'
     mycursor.execute(query,(transactionid.get(),transactionname.get(),transactiondate.get(),owedmoney.get(),issettled.get(),expensetype.get(),payorid.get(), groupid.get()))
@@ -116,6 +201,11 @@ def add_transaction():
             query='insert into transaction (transactionid, transactionname, transactiondate, owedmoney, issettled, expensetype, payorid, groupid) values(%s,%s,%s,%s,%s,%s,%s,%s)'
             mycursor.execute(query,(transactionid.get(),transactionname.get(),transactiondate.get(),owedmoney.get(),issettled.get(),
                                     expensetype.get(),payorid.get(),groupid.get()))
+            query ='''insert into user_makes_transaction values (1, 2010);
+                        insert into user_makes_transaction values (2, 2010);
+                        update user set userbalance = userbalance + 200 where userid = 1;
+                        update user set userbalance = userbalance - 200 where userid = 2;
+                        update befriends set friendbalance = friendbalance + 200 where user1id = 1 and user2id = 2;'''
                      
         except:
             messagebox.showerror('Error','Problem with data format',parent=screen)
@@ -141,82 +231,8 @@ def connect_database():
             messagebox.showerror('Error','Invalid Details',parent=connectWindow)
             return
 
-        try:
-            query='create database transactions'
-            mycursor.execute(query)
+        try:    
             query='use transactions'
-            mycursor.execute(query)
-            query = '''
-        create table user(
-        userid int AUTO_INCREMENT,
-        username varchar(50) not null,
-        userbalance numeric(6,2),
-        primary key(userid)
-        );
-
-        create table usergroup(
-        groupid int AUTO_INCREMENT,
-        groupname varchar(50) not null,
-        groupbalance numeric(6,2),
-        primary key(groupid)
-        );
-
-        create table transaction(
-        transactionid numeric(10) not null,
-        transactionname varchar(50) not null,
-        transactiondate DATE not null,
-        owedmoney numeric(6,2) not null,
-        issettled boolean not null,
-        expensetype varchar(15) not null,
-        payorid int,
-        groupid int,
-        primary key(transactionid),
-        foreign key(groupid) references usergroup(groupid),
-        foreign key(payorid) references user(userid)
-        );
-
-        create table befriends(
-        user1id int,
-        user2id int,
-        friendbalance numeric(6,2),
-        primary key(user1id, user2id, friendbalance),
-        foreign key(user1id) references user(userid),
-        foreign key(user2id) references user(userid)
-        );
-
-        create table joins(
-        userid int,
-        groupid int,
-        primary key(userid, groupid),
-        foreign key(userid) references user(userid),
-        foreign key(groupid) references usergroup(groupid)
-        );
-        
-        create table user_makes_transaction(
-        userid int,
-        transactionid numeric(10) not null,
-        primary key(userid, transactionid),
-        foreign key(userid) references user(userid),
-        foreign key(transactionid) references transaction(transactionid)
-        );
-
-        insert into user(username, userbalance) values
-        ('Betty', 0),
-        ('James', 0),
-        ('Inez', 0),
-        ('August', 0);
-
-        insert into usergroup(groupname, groupbalance) values
-        ('Genshin Players', 0),
-        ('Swifties', 0),
-        ('ML Players', 0);
-
-        insert into joins(userid, groupid) values
-        (1, 1),
-        (3, 1),
-        (4, 1);
-        '''
-
             mycursor.execute(query)
         except:
             query='use transactions'
@@ -227,7 +243,6 @@ def connect_database():
         searchstudentButton.config(state=NORMAL)
         updatestudentButton.config(state=NORMAL)
         showstudentButton.config(state=NORMAL)
-     
         deletestudentButton.config(state=NORMAL)
 
 
@@ -293,10 +308,10 @@ connectButton.place(x=980,y=0)
 leftFrame=Frame(root)
 leftFrame.place(x=50,y=80,width=300,height=500)
 
-addstudentButton=ttk.Button(leftFrame,text='Add Expense',width=25,state=DISABLED,command=lambda :toplevel_data('Add Student','Add',add_transaction))
+addstudentButton=ttk.Button(leftFrame,text='Add Expense',width=25,state=DISABLED,command=lambda :toplevel_data('Add Transaction','Add',add_transaction))
 addstudentButton.grid(row=1,column=0,pady=10)
 
-searchstudentButton=ttk.Button(leftFrame,text='Search Expense',width=25,state=DISABLED,command=lambda :toplevel_data('Search Student','Search',search_transactions))
+searchstudentButton=ttk.Button(leftFrame,text='Search Expense',width=25,state=DISABLED,command=lambda :toplevel_data('Search Transaction','Search',search_transactions))
 searchstudentButton.grid(row=2,column=0,pady=10)
 
 deletestudentButton=ttk.Button(leftFrame,text='Delete Expense',width=25,state=DISABLED,command=delete_transaction)

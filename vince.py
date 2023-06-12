@@ -121,8 +121,26 @@ def add_transaction():
         cursor.close()
         connection.close()
 
+# not fixed
 def delete_transaction():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        transaction_id = input("Enter transaction id to remove: ")
+        query = "delete from transaction where transactionid = %s"
+        values = (current_id,transaction_id)
+
+        cursor.execute(query, values)
+        connection.commit()
+        print("Successfully removed transaction!")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def search_transaction():
     connection = connect_to_database()
@@ -297,15 +315,21 @@ def update_group():
     cursor = connection.cursor()
 
     try:
-        return None
+        group_id = input("Enter group id: ")
+        group_name = input("Enter new group name: ")
+        query = "UPDATE usergroup SET groupname = %s WHERE groupid = %s;"
+        values = (group_name, group_id)
+        cursor.execute(query, values)
+        connection.commit()
+        print("Group updated successfully.")
 
-    except Exception:
-        print("Invalid input! Please enter valid values.")
+    except Exception as e:
+        print("Error updating group:", e)
 
     finally:
         cursor.close()
         connection.close()
-
+        
 def view_expenses_in_month():
     connection = connect_to_database()
     cursor = connection.cursor()

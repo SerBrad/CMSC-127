@@ -235,7 +235,24 @@ def search_friend():
         connection.close()
 
 def update_friend():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        friend_id = input("Enter friend id: ")
+        friend_name = input("Enter new friend name: ")
+        query = "UPDATE user SET username = %s WHERE userid = %s;"
+        values = (friend_name, friend_id)
+        cursor.execute(query, values)
+        connection.commit()
+        print("Friend updated successfully.")
+
+    except Exception as e:
+        print("Error updating friend:", e)
+
+    finally:
+        cursor.close()
+        connection.close()
 
 # ----- Add group -----
 # insert into joins values(3,3);

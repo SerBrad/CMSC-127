@@ -9,6 +9,10 @@ def openGroup():
 
 def exit(): 
     root.destroy()
+    
+def openUser(): 
+    root.destroy()
+    import user
 
 #main 
 root = Tk()
@@ -32,7 +36,7 @@ bottomFrame = Frame(root)
 bottomFrame.place(x=310, y=400, width=500, height=350)
 
 # add new user
-newUserButton = Button(bottomFrame, text='New User',height=2,width=40, bg='blue')
+newUserButton = Button(bottomFrame, text='New User',height=2,width=40, bg='blue', command=openUser)
 newUserButton.grid(row=0, column=0, padx=130, pady=5)
 
 #friend button

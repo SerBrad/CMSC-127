@@ -176,13 +176,18 @@ def search_friend():
     cursor = connection.cursor()
 
     try:
-        friend_id = input("Enter id of to be deleted friend: ")
-        query = "delete from befriends where (user1id = %s and user2id = %s) or (user1id = %s and user2id = %s);"
-        values = (current_id, friend_id, friend_id, current_id)
+        query = "select userid, username from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and user.userid != %s;"
+        values = (current_id,)
 
         cursor.execute(query, values)
-        connection.commit()
-        print("Friend successfully deleted!")
+        result = cursor.fetchall()
+
+        if result:
+            print("Friends found:")
+            for row in result:
+                print(row)
+        else:
+            print("No friends found.")
 
     except Exception:
         print("Invalid input! Please enter valid values.")
@@ -194,17 +199,92 @@ def search_friend():
 def update_friend():
     return None
 
+# ----- Add group -----
+# insert into joins values(3,3);
+# ----- Delete group -----
+# delete from joins where userid = 1 and groupid = 1;
+# ----- Search group -----
+# select * from usergroup;
+# ----- Update group -----
+# update usergroup set groupname = "Arianators" where groupname = "Swifties"; -- updates necessary values set by logged in user (ex: groupname)
+
 def add_group():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        group_id = input("Enter group id to join: ")
+        query = "insert into joins values(%s,%s)"
+        values = (current_id, group_id)
+
+        cursor.execute(query, values)
+        connection.commit()
+        print("Successfully joined group!")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def delete_group():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        group_id = input("Enter group id to unjoin: ")
+        query = "delete from joins where userid = %s and groupid = %s"
+        values = (current_id, group_id)
+
+        cursor.execute(query, values)
+        connection.commit()
+        print("Successfully unjoined group!")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def search_group():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        query = "select * from usergroup;"
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        if result:
+            print("Groups found:")
+            for row in result:
+                print(row)
+        else:
+            print("No groups found.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def update_group():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        return None
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def view_expenses_in_month():
     connection = connect_to_database()

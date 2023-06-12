@@ -125,7 +125,7 @@ insert into befriends values (3, 1, 0);
 ----- Delete friend -----
 delete from befriends where (user1id = 1 and user2id = 2) or (user1id = 2 and user2id = 1);
 ----- Search friend -----
-select username from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and user.userid != 1;
+select userid, username from user join befriends on (user.userid = befriends.user1id or user.userid = befriends.user2id) and user.userid != 1;
 ----- Update friend -----
 update user set username = "Taylor" where username = "Betty"; -- updates necessary values set by logged in user (ex: username)
 

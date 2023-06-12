@@ -121,12 +121,32 @@ def add_transaction():
         cursor.close()
         connection.close()
 
-
 def delete_transaction():
     return None
 
 def search_transaction():
-    return None
+    connection = connect_to_database()
+    cursor = connection.cursor()
+
+    try:
+        query = "select * from transaction;"
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        if result:
+            print("Transactions found:")
+            for row in result:
+                print(row)
+        else:
+            print("No transactions found.")
+
+    except Exception:
+        print("Invalid input! Please enter valid values.")
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def update_transaction():
     return None
@@ -452,21 +472,20 @@ def logIn():
 def menu():
     print('''
 --------------------------------------------------
+        Options: 
+        
 1. Add transaction
 2. Delete transaction
 3. Search tranasaction
 4. Update transaction
-
 5. Add friend
 6. Delete friend
 7. Search friend
 8. Update friend
-
 9. Add group
 10. Delete group
 11. Search group
 12. Update group
-
 13. View all expenses made within a month;
 14. View all expenses made with a friend;
 15. View all expenses made with a group;
@@ -474,10 +493,9 @@ def menu():
 17. View all friends with outstanding balance;
 18. View all groups;
 19. View all groups with an outstanding balance
-
-0. Exit
 20. Sign up
 21. Log In
+0. Exit
 --------------------------------------------------
     ''')
 # Main function to open the application and test the views
